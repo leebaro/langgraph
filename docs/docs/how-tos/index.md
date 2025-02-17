@@ -11,9 +11,9 @@ Here you’ll find answers to “How do I...?” types of questions. These guide
 
 ### Graph API Basics
 
-- [How to update graph state from nodes](state-reducers.ipynb)
-- [How to create a sequence of steps](sequence.ipynb)
-- [How to create branches for parallel execution](branching.ipynb)
+- [How to update graph state from nodes](state-reducers.md)
+- [How to create a sequence of steps](sequence.md)
+- [How to create branches for parallel execution](branching.md)
 - [How to create and control loops with recursion limits](recursion-limit.ipynb)
 - [How to visualize your graph](visualization.ipynb)
 
@@ -162,7 +162,7 @@ One of the big benefits of LangGraph is that you can easily create your own agen
 
 These guides show how to use the prebuilt ReAct agent:
 
-- [How to use the pre-built ReAct agent](create-react-agent.ipynb)
+- [How to use the pre-built ReAct agent](create-react-agent.md)
 - [How to add thread-level memory to a ReAct Agent](create-react-agent-memory.ipynb)
 - [How to add a custom system prompt to a ReAct agent](create-react-agent-system-prompt.ipynb)
 - [How to add human-in-the-loop processes to a ReAct agent](create-react-agent-hitl.ipynb)
@@ -204,6 +204,7 @@ Learn how to set up your app for deployment to LangGraph Platform:
 - [How to test locally](../cloud/deployment/test_locally.md)
 - [How to rebuild graph at runtime](../cloud/deployment/graph_rebuild.md)
 - [How to use LangGraph Platform to deploy CrewAI, AutoGen, and other frameworks](autogen-langgraph-platform.ipynb)
+- [How to integrate LangGraph into your React application](../cloud/how-tos/use_stream_react.md)
 
 ### Deployment
 
