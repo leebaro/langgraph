@@ -1,8 +1,6 @@
 # How to integrate LangGraph into your React application
 
-!!! info "Prerequisites"
-    - [LangGraph Platform](../../concepts/langgraph_platform.md)
-    - [LangGraph Server](../../concepts/langgraph_server.md)
+!!! info "Prerequisites" - [LangGraph Platform](../../concepts/langgraph_platform.md) - [LangGraph Server](../../concepts/langgraph_server.md)
 
 The `useStream()` React hook provides a seamless way to integrate LangGraph into your React applications. It handles all the complexities of streaming, state management, and branching logic, letting you focus on building great chat experiences.
 
@@ -169,10 +167,14 @@ The `useStream()` hook exposes the `interrupt` property, which will be filled wi
 Learn more about interrupts in the [How to handle interrupts](../../how-tos/human_in_the_loop/wait-user-input.ipynb) guide.
 
 ```tsx
+<<<<<<< HEAD
 const thread = useStream<
   { messages: Message[] },
   { InterruptType: string }
 >({
+=======
+const thread = useStream<{ messages: Message[] }, { InterruptType: string }>({
+>>>>>>> main
   apiUrl: "http://localhost:2024",
   assistantId: "agent",
   messagesKey: "messages",
@@ -182,7 +184,10 @@ if (thread.interrupt) {
   return (
     <div>
       Interrupted! {thread.interrupt.value}
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
       <button
         type="button"
         onClick={() => {
@@ -370,6 +375,36 @@ export default function App() {
 
 For advanced use cases you can use the `experimental_branchTree` property to get the tree representation of the thread, which can be used to render branching controls for non-message based graphs.
 
+<<<<<<< HEAD
+=======
+### Optimistic Updates
+
+You can optimistically update the client state before performing a network request to the agent, allowing you to provide immediate feedback to the user, such as showing the user message immediately before the agent has seen the request.
+
+```tsx
+const stream = useStream({
+  apiUrl: "http://localhost:2024",
+  assistantId: "agent",
+  messagesKey: "messages",
+});
+
+const handleSubmit = (text: string) => {
+  const newMessage = { type: "human" as const, content: text };
+
+  stream.submit(
+    { messages: [newMessage] },
+    {
+      optimisticValues(prev) {
+        const prevMessages = prev.messages ?? [];
+        const newMessages = [...prevMessages, newMessage];
+        return { ...prev, messages: newMessages };
+      },
+    }
+  );
+};
+```
+
+>>>>>>> main
 ### TypeScript
 
 The `useStream()` hook is friendly for apps written in TypeScript and you can specify types for the state to get better type safety and IDE support.
@@ -397,6 +432,7 @@ You can also optionally specify types for different scenarios, such as:
 - `UpdateType`: Type for the submit function (default: `Partial<State>`)
 
 ```tsx
+<<<<<<< HEAD
 
 const thread = useStream<State, {
   UpdateType: {
@@ -412,6 +448,25 @@ const thread = useStream<State, {
     model: string;
   };
 }>({
+=======
+const thread = useStream<
+  State,
+  {
+    UpdateType: {
+      messages: Message[] | Message;
+      context?: Record<string, unknown>;
+    };
+    InterruptType: string;
+    CustomEventType: {
+      type: "progress" | "debug";
+      payload: unknown;
+    };
+    ConfigurableType: {
+      model: string;
+    };
+  }
+>({
+>>>>>>> main
   apiUrl: "http://localhost:2024",
   assistantId: "agent",
   messagesKey: "messages",

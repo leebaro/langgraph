@@ -5,6 +5,10 @@ from functools import partial
 from typing import (
     Annotated,
     List,
+<<<<<<< HEAD
+=======
+    Optional,
+>>>>>>> main
     Type,
     TypeVar,
     Union,
@@ -15,6 +19,7 @@ from langchain_core.messages import (
     AIMessage,
     AnyMessage,
     HumanMessage,
+    RemoveMessage,
     SystemMessage,
     ToolCall,
     ToolMessage,
@@ -28,6 +33,7 @@ from typing_extensions import TypedDict
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import START, MessagesState, StateGraph, add_messages
+from langgraph.graph.message import REMOVE_ALL_MESSAGES
 from langgraph.prebuilt import (
     ToolNode,
     create_react_agent,
@@ -35,6 +41,13 @@ from langgraph.prebuilt import (
 )
 from langgraph.prebuilt.chat_agent_executor import (
     AgentState,
+<<<<<<< HEAD
+=======
+    AgentStatePydantic,
+    StateSchemaType,
+    _get_model,
+    _should_bind_tools,
+>>>>>>> main
     _validate_chat_history,
 )
 from langgraph.prebuilt.tool_node import (
@@ -92,7 +105,6 @@ def test_no_prompt(
                 _AnyIdHumanMessage(content="hi?"),
                 AIMessage(content="hi?", id="0"),
             ],
-            "agent": "agent",
         }
         assert saved.metadata == {
             "parents": {},
@@ -124,7 +136,6 @@ async def test_no_prompt_async(checkpointer_name: str) -> None:
                     _AnyIdHumanMessage(content="hi?"),
                     AIMessage(content="hi?", id="0"),
                 ],
-                "agent": "agent",
             }
             assert saved.metadata == {
                 "parents": {},
@@ -526,21 +537,44 @@ def test_react_agent_with_structured_response(version: str) -> None:
         assert response["messages"][-2].content == "The weather is sunny and 75°F."
 
 
+<<<<<<< HEAD
+=======
+class CustomState(AgentState):
+    user_name: str
+
+
+class CustomStatePydantic(AgentStatePydantic):
+    user_name: Optional[str] = None
+
+
+>>>>>>> main
 @pytest.mark.skipif(
     not IS_LANGCHAIN_CORE_030_OR_GREATER,
     reason="Langchain core 0.3.0 or greater is required",
 )
 @pytest.mark.parametrize("checkpointer_name", ALL_CHECKPOINTERS_SYNC)
 @pytest.mark.parametrize("version", REACT_TOOL_CALL_VERSIONS)
+<<<<<<< HEAD
 def test_react_agent_update_state(
     request: pytest.FixtureRequest, checkpointer_name: str, version: str
+=======
+@pytest.mark.parametrize("state_schema", [CustomState, CustomStatePydantic])
+def test_react_agent_update_state(
+    request: pytest.FixtureRequest,
+    checkpointer_name: str,
+    version: str,
+    state_schema: StateSchemaType,
+>>>>>>> main
 ) -> None:
     checkpointer: BaseCheckpointSaver = request.getfixturevalue(
         "checkpointer_" + checkpointer_name
     )
+<<<<<<< HEAD
 
     class State(AgentState):
         user_name: str
+=======
+>>>>>>> main
 
     @dec_tool
     def get_user_name(tool_call_id: Annotated[str, InjectedToolCallId]):
@@ -557,20 +591,31 @@ def test_react_agent_update_state(
             }
         )
 
-    def prompt(state: State):
-        user_name = state.get("user_name")
-        if user_name is None:
-            return state["messages"]
+    if issubclass(state_schema, AgentStatePydantic):
 
-        system_msg = f"User name is {user_name}"
-        return [{"role": "system", "content": system_msg}] + state["messages"]
+        def prompt(state: CustomStatePydantic):
+            user_name = state.user_name
+            if user_name is None:
+                return state.messages
+
+            system_msg = f"User name is {user_name}"
+            return [{"role": "system", "content": system_msg}] + state.messages
+    else:
+
+        def prompt(state: CustomState):
+            user_name = state.get("user_name")
+            if user_name is None:
+                return state["messages"]
+
+            system_msg = f"User name is {user_name}"
+            return [{"role": "system", "content": system_msg}] + state["messages"]
 
     tool_calls = [[{"args": {}, "id": "1", "name": "get_user_name"}]]
     model = FakeToolCallingModel(tool_calls=tool_calls)
     agent = create_react_agent(
         model,
         [get_user_name],
-        state_schema=State,
+        state_schema=state_schema,
         prompt=prompt,
         checkpointer=checkpointer,
         version=version,
@@ -800,23 +845,45 @@ def test_tool_node_inject_state(schema_: Type[T]) -> None:
     assert tool_message.content == "hi?"
 
 
-@pytest.mark.parametrize("version", REACT_TOOL_CALL_VERSIONS)
-def test_create_react_agent_inject_vars(version: str) -> None:
-    class AgentStateExtraKey(AgentState):
-        foo: int
+class AgentStateExtraKey(AgentState):
+    foo: int
 
+
+class AgentStateExtraKeyPydantic(AgentStatePydantic):
+    foo: int
+
+
+@pytest.mark.parametrize("version", REACT_TOOL_CALL_VERSIONS)
+@pytest.mark.parametrize(
+    "state_schema", [AgentStateExtraKey, AgentStateExtraKeyPydantic]
+)
+def test_create_react_agent_inject_vars(
+    version: str, state_schema: StateSchemaType
+) -> None:
     store = InMemoryStore()
     namespace = ("test",)
     store.put(namespace, "test_key", {"bar": 3})
 
-    def tool1(
-        some_val: int,
-        state: Annotated[dict, InjectedState],
-        store: Annotated[BaseStore, InjectedStore()],
-    ) -> str:
-        """Tool 1 docstring."""
-        store_val = store.get(namespace, "test_key").value["bar"]
-        return some_val + state["foo"] + store_val
+    if issubclass(state_schema, AgentStatePydantic):
+
+        def tool1(
+            some_val: int,
+            state: Annotated[AgentStateExtraKeyPydantic, InjectedState],
+            store: Annotated[BaseStore, InjectedStore()],
+        ) -> str:
+            """Tool 1 docstring."""
+            store_val = store.get(namespace, "test_key").value["bar"]
+            return some_val + state.foo + store_val
+    else:
+
+        def tool1(
+            some_val: int,
+            state: Annotated[dict, InjectedState],
+            store: Annotated[BaseStore, InjectedStore()],
+        ) -> str:
+            """Tool 1 docstring."""
+            store_val = store.get(namespace, "test_key").value["bar"]
+            return some_val + state["foo"] + store_val
 
     tool_call = {
         "name": "tool1",
@@ -828,7 +895,7 @@ def test_create_react_agent_inject_vars(version: str) -> None:
     agent = create_react_agent(
         model,
         [tool1],
-        state_schema=AgentStateExtraKey,
+        state_schema=state_schema,
         store=store,
         version=version,
     )
@@ -1324,3 +1391,102 @@ def test_tool_node_node_interrupt(
             ns=[AnyStr("tools:")],
         ),
     )
+<<<<<<< HEAD
+=======
+
+
+@pytest.mark.parametrize("tool_style", ["openai", "anthropic"])
+def test_should_bind_tools(tool_style: str) -> None:
+    @dec_tool
+    def some_tool(some_val: int) -> str:
+        """Tool docstring."""
+        return "meow"
+
+    @dec_tool
+    def some_other_tool(some_val: int) -> str:
+        """Tool docstring."""
+        return "meow"
+
+    model = FakeToolCallingModel(tool_style=tool_style)
+    # should bind when a regular model
+    assert _should_bind_tools(model, [])
+    assert _should_bind_tools(model, [some_tool])
+
+    # should bind when a seq
+    seq = model | RunnableLambda(lambda message: message)
+    assert _should_bind_tools(seq, [])
+    assert _should_bind_tools(seq, [some_tool])
+
+    # should not bind when a model with tools
+    assert not _should_bind_tools(model.bind_tools([some_tool]), [some_tool])
+    # should not bind when a seq with tools
+    seq_with_tools = model.bind_tools([some_tool]) | RunnableLambda(
+        lambda message: message
+    )
+    assert not _should_bind_tools(seq_with_tools, [some_tool])
+
+    # should raise on invalid inputs
+    with pytest.raises(ValueError):
+        _should_bind_tools(model.bind_tools([some_tool]), [])
+    with pytest.raises(ValueError):
+        _should_bind_tools(model.bind_tools([some_tool]), [some_other_tool])
+    with pytest.raises(ValueError):
+        _should_bind_tools(model.bind_tools([some_tool]), [some_tool, some_other_tool])
+
+
+def test_get_model() -> None:
+    model = FakeToolCallingModel(tool_calls=[])
+    assert _get_model(model) == model
+
+    @dec_tool
+    def some_tool(some_val: int) -> str:
+        """Tool docstring."""
+        return "meow"
+
+    model_with_tools = model.bind_tools([some_tool])
+    assert _get_model(model_with_tools) == model
+
+    seq = model | RunnableLambda(lambda message: message)
+    assert _get_model(seq) == model
+
+    seq_with_tools = model.bind_tools([some_tool]) | RunnableLambda(
+        lambda message: message
+    )
+    assert _get_model(seq_with_tools) == model
+
+    with pytest.raises(TypeError):
+        _get_model(RunnableLambda(lambda message: message))
+
+
+def test_pre_model_hook() -> None:
+    model = FakeToolCallingModel(tool_calls=[])
+
+    # Test `llm_input_messages`
+    def pre_model_hook(state: AgentState):
+        return {"llm_input_messages": [HumanMessage("Hello!")]}
+
+    agent = create_react_agent(model, [], pre_model_hook=pre_model_hook)
+    assert "pre_model_hook" in agent.nodes
+    result = agent.invoke({"messages": [HumanMessage("hi?")]})
+    assert result == {
+        "messages": [
+            _AnyIdHumanMessage(content="hi?"),
+            AIMessage(content="Hello!", id="0"),
+        ]
+    }
+
+    # Test `messages`
+    def pre_model_hook(state: AgentState):
+        return {
+            "messages": [RemoveMessage(id=REMOVE_ALL_MESSAGES), HumanMessage("Hello!")]
+        }
+
+    agent = create_react_agent(model, [], pre_model_hook=pre_model_hook)
+    result = agent.invoke({"messages": [HumanMessage("hi?")]})
+    assert result == {
+        "messages": [
+            _AnyIdHumanMessage(content="Hello!"),
+            AIMessage(content="Hello!", id="1"),
+        ]
+    }
+>>>>>>> main

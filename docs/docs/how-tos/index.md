@@ -163,6 +163,7 @@ These guides show how to use the prebuilt ReAct agent:
 - [How to add human-in-the-loop processes to a ReAct agent](create-react-agent-hitl.ipynb)
 - [How to return structured output from a ReAct agent](create-react-agent-structured-output.ipynb)
 - [How to add semantic search for long-term memory to a ReAct agent](memory/semantic-search.ipynb#using-in-create-react-agent)
+- [How to manage message history in a ReAct agent](create-react-agent-manage-message-history.ipynb)
 
 Interested in further customizing the ReAct agent? This guide provides an
 overview of its underlying implementation to help you customize for your own needs:
@@ -198,15 +199,17 @@ Learn how to set up your app for deployment to LangGraph Platform:
 - [How to test locally](../cloud/deployment/test_locally.md)
 - [How to rebuild graph at runtime](../cloud/deployment/graph_rebuild.md)
 - [How to use LangGraph Platform to deploy CrewAI, AutoGen, and other frameworks](autogen-langgraph-platform.ipynb)
-- [How to integrate LangGraph into your React application](../cloud/how-tos/use_stream_react.md)
 
 ### Deployment
 
-LangGraph applications can be deployed using LangGraph Cloud, which provides a range of services to help you deploy, manage, and scale your applications.
+LangGraph applications can be deployed using LangGraph Platform, which provides a range of services to help you deploy, manage, and scale your applications.
 
-- [How to deploy to LangGraph cloud](../cloud/deployment/cloud.md)
-- [How to deploy to a self-hosted environment](./deploy-self-hosted.md)
+- [How to deploy to Cloud SaaS](../cloud/deployment/cloud.md)
+- [How to deploy the Self-Hosted Data Plane](../cloud/deployment/self_hosted_data_plane.md)
+- [How to deploy the Self-Hosted Control Plane](../cloud/deployment/self_hosted_control_plane.md)
+- [How to deploy a Standalone Container](../cloud/deployment/standalone_container.md)
 - [How to interact with the deployment using RemoteGraph](./use-remote-graph.md)
+- [How to add TTLs to your LangGraph application](./ttl/configure_ttl.md)
 
 ### Authentication & Access Control
 
@@ -257,6 +260,13 @@ Streaming the results of your LLM application is vital for ensuring a good user 
 - [How to stream in debug mode](../cloud/how-tos/stream_debug.md)
 - [How to stream multiple modes](../cloud/how-tos/stream_multiple.md)
 
+### Frontend and Generative UI
+
+With LangGraph Platform you can integrate LangGraph agents into your React applications and colocate UI components with your agent code. 
+
+- [How to integrate LangGraph into your React application](../cloud/how-tos/use_stream_react.md)
+- [How to implement Generative User Interfaces with LangGraph](../cloud/how-tos/generative_ui_react.md)
+
 ### Human-in-the-loop
 
 When designing complex graphs, relying entirely on the LLM for decision-making can be risky, particularly when it involves tools that interact with files, APIs, or databases. These interactions may lead to unintended data access or modifications, depending on the use case. To mitigate these risks, LangGraph allows you to integrate human-in-the-loop behavior, ensuring your LLM applications operate as intended without undesirable outcomes.
@@ -294,6 +304,10 @@ LangGraph Studio is a built-in UI for visualizing, testing, and debugging your a
 - [How to interact with threads in LangGraph Studio](../cloud/how-tos/threads_studio.md)
 - [How to add nodes as dataset examples in LangGraph Studio](../cloud/how-tos/datasets_studio.md)
 - [How to engineer prompts in LangGraph Studio](../cloud/how-tos/iterate_graph_studio.md)
+<<<<<<< HEAD
+=======
+- [How to test your agent against remote traces](../cloud/how-tos/clone_traces_studio.md)
+>>>>>>> main
 
 ## Troubleshooting
 

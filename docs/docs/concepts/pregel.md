@@ -284,7 +284,11 @@ LangGraph provides two high-level APIs for creating a Pregel application: the [S
     {'__start__': <langgraph.pregel.read.PregelNode at 0x7d05e3ba1810>,
      'write_essay': <langgraph.pregel.read.PregelNode at 0x7d05e3ba14d0>,
      'score_essay': <langgraph.pregel.read.PregelNode at 0x7d05e3ba1710>}
+<<<<<<< HEAD
      ```
+=======
+    ```
+>>>>>>> main
 
     ```python
     print(graph.channels)
@@ -344,4 +348,8 @@ LangGraph provides two high-level APIs for creating a Pregel application: the [S
     {'write_essay': <langgraph.pregel.read.PregelNode object at 0x7d05e2f9aad0>}
     Channels: 
     {'__start__': <langgraph.channels.ephemeral_value.EphemeralValue object at 0x7d05e2c906c0>, '__end__': <langgraph.channels.last_value.LastValue object at 0x7d05e2c90c40>, '__previous__': <langgraph.channels.last_value.LastValue object at 0x7d05e1007280>}
+<<<<<<< HEAD
     ```
+=======
+    ```
+>>>>>>> main
