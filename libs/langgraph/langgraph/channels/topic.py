@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 from typing import Any, Generic, Iterator, Optional, Sequence, Type, Union
+=======
+from collections.abc import Iterator, Sequence
+from typing import Any, Generic, Union
+>>>>>>> main
 
 from typing_extensions import Self
 
@@ -29,7 +34,7 @@ class Topic(
 
     __slots__ = ("values", "accumulate")
 
-    def __init__(self, typ: Type[Value], accumulate: bool = False) -> None:
+    def __init__(self, typ: type[Value], accumulate: bool = False) -> None:
         super().__init__(typ)
         # attrs
         self.accumulate = accumulate

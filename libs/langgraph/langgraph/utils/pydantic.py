@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 from typing import Any, Dict, Optional, Union
+=======
+import sys
+import typing
+from dataclasses import is_dataclass
+from typing import Any, Optional, Union
+>>>>>>> main
 
 from pydantic import BaseModel
 from pydantic.v1 import BaseModel as BaseModelV1
@@ -7,7 +14,7 @@ from pydantic.v1 import BaseModel as BaseModelV1
 def create_model(
     model_name: str,
     *,
-    field_definitions: Optional[Dict[str, Any]] = None,
+    field_definitions: Optional[dict[str, Any]] = None,
     root: Optional[Any] = None,
 ) -> Union[BaseModel, BaseModelV1]:
     """Create a pydantic model with the given field definitions.

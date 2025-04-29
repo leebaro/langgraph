@@ -1,4 +1,5 @@
-from typing import Any, Generic, NamedTuple, Optional, Sequence, Type, Union
+from collections.abc import Sequence, Set
+from typing import Any, Generic, NamedTuple, Optional, Union
 
 from typing_extensions import Self
 
@@ -7,11 +8,11 @@ from langgraph.errors import EmptyChannelError, InvalidUpdateError
 
 
 class WaitForNames(NamedTuple):
-    names: set[Any]
+    names: Set[Any]
 
 
 class DynamicBarrierValue(
-    Generic[Value], BaseChannel[Value, Union[Value, WaitForNames], set[Value]]
+    Generic[Value], BaseChannel[Value, Union[Value, WaitForNames], Set[Value]]
 ):
     """A channel that switches between two states
 
@@ -24,10 +25,10 @@ class DynamicBarrierValue(
 
     __slots__ = ("names", "seen")
 
-    names: Optional[set[Value]]
+    names: Optional[Set[Value]]
     seen: set[Value]
 
-    def __init__(self, typ: Type[Value]) -> None:
+    def __init__(self, typ: type[Value]) -> None:
         super().__init__(typ)
         self.names = None
         self.seen = set()
@@ -36,21 +37,37 @@ class DynamicBarrierValue(
         return isinstance(value, DynamicBarrierValue) and value.names == self.names
 
     @property
-    def ValueType(self) -> Type[Value]:
+    def ValueType(self) -> type[Value]:
         """The type of the value stored in the channel."""
         return self.typ
 
     @property
-    def UpdateType(self) -> Type[Value]:
+    def UpdateType(self) -> type[Value]:
         """The type of the update received by the channel."""
         return self.typ
 
+<<<<<<< HEAD
     def checkpoint(self) -> tuple[Optional[set[Value]], set[Value]]:
         return (self.names, self.seen)
 
     def from_checkpoint(
         self,
         checkpoint: Optional[tuple[Optional[set[Value]], set[Value]]],
+=======
+    def copy(self) -> Self:
+        """Return a copy of the channel."""
+        empty = self.__class__(self.typ)
+        empty.key = self.key
+        empty.names = self.names
+        empty.seen = self.seen.copy()
+        return empty
+
+    def checkpoint(self) -> tuple[Optional[Set[Value]], set[Value]]:
+        return (self.names, self.seen)
+
+    def from_checkpoint(
+        self, checkpoint: tuple[Optional[Set[Value]], set[Value]]
+>>>>>>> main
     ) -> Self:
         empty = self.__class__(self.typ)
         empty.key = self.key

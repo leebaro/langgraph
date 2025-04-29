@@ -1,15 +1,16 @@
-import asyncio
 import logging
 from collections import defaultdict
+from collections.abc import Awaitable, Hashable, Sequence
 from typing import (
     Any,
-    Awaitable,
     Callable,
+<<<<<<< HEAD
     Hashable,
     Literal,
+=======
+>>>>>>> main
     NamedTuple,
     Optional,
-    Sequence,
     Union,
     cast,
     get_args,
@@ -19,9 +20,6 @@ from typing import (
 )
 
 from langchain_core.runnables import Runnable
-from langchain_core.runnables.config import RunnableConfig
-from langchain_core.runnables.graph import Graph as DrawableGraph
-from langchain_core.runnables.graph import Node as DrawableNode
 from typing_extensions import Self
 
 from langgraph.channels.ephemeral_value import EphemeralValue
@@ -292,7 +290,7 @@ class Graph:
         # validate the condition
         if name in self.branches[source]:
             raise ValueError(
-                f"Branch with name `{path.name}` already exists for node " f"`{source}`"
+                f"Branch with name `{path.name}` already exists for node `{source}`"
             )
         # save it
         self.branches[source][name] = Branch(path, path_map_, then)
@@ -476,26 +474,24 @@ class CompiledGraph(Pregel):
         self.nodes[key] = (
             PregelNode(channels=[], triggers=[], metadata=node.metadata)
             | node.runnable
-            | ChannelWrite([ChannelWriteEntry(key)], tags=[TAG_HIDDEN])
+            | ChannelWrite([ChannelWriteEntry(key)])
         )
         cast(list[str], self.stream_channels).append(key)
 
     def attach_edge(self, start: str, end: str) -> None:
         if end == END:
             # publish to end channel
-            self.nodes[start].writers.append(
-                ChannelWrite([ChannelWriteEntry(END)], tags=[TAG_HIDDEN])
-            )
+            self.nodes[start].writers.append(ChannelWrite([ChannelWriteEntry(END)]))
         else:
             # subscribe to start channel
             self.nodes[end].triggers.append(start)
             cast(list[str], self.nodes[end].channels).append(start)
 
     def attach_branch(self, start: str, name: str, branch: Branch) -> None:
-        def branch_writer(
-            packets: Sequence[Union[str, Send]], config: RunnableConfig
-        ) -> Optional[ChannelWrite]:
-            writes = [
+        def get_writes(
+            packets: Sequence[Union[str, Send]], static: bool = False
+        ) -> Sequence[Union[ChannelWriteEntry, Send]]:
+            return [
                 (
                     ChannelWriteEntry(f"branch:{start}:{name}:{p}" if p != END else END)
                     if not isinstance(p, Send)
@@ -503,17 +499,13 @@ class CompiledGraph(Pregel):
                 )
                 for p in packets
             ]
-            return ChannelWrite(
-                cast(Sequence[Union[ChannelWriteEntry, Send]], writes),
-                tags=[TAG_HIDDEN],
-            )
 
         # add hidden start node
         if start == START and start not in self.nodes:
             self.nodes[start] = Channel.subscribe_to(START, tags=[TAG_HIDDEN])
 
         # attach branch writer
-        self.nodes[start] |= branch.run(branch_writer)
+        self.nodes[start] |= branch.run(get_writes)
 
         # attach branch readers
         ends = branch.ends.values() if branch.ends else [node for node in self.nodes]
@@ -523,6 +515,7 @@ class CompiledGraph(Pregel):
                 self.channels[channel_name] = EphemeralValue(Any)
                 self.nodes[end].triggers.append(channel_name)
                 cast(list[str], self.nodes[end].channels).append(channel_name)
+<<<<<<< HEAD
 
     async def aget_graph(
         self,
@@ -640,3 +633,5 @@ class CompiledGraph(Pregel):
             "text/plain": repr(self),
             "image/png": self.get_graph().draw_mermaid_png(),
         }
+=======
+>>>>>>> main

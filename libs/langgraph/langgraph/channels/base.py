@@ -1,5 +1,10 @@
 from abc import ABC, abstractmethod
+<<<<<<< HEAD
 from typing import Any, Generic, Optional, Sequence, TypeVar
+=======
+from collections.abc import Sequence
+from typing import Any, Generic, TypeVar
+>>>>>>> main
 
 from typing_extensions import Self
 

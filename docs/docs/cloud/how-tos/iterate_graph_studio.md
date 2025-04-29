@@ -122,11 +122,11 @@ With this set up, running your graph and viewing in LangGraph Studio will result
 
 **Note the configuration icon in the top right corner of the `call_model` node**:
 
-![Graph in Studio](../img/studio_graph_with_configuration.png){width=1200}
+![Graph in Studio](img/studio_graph_with_configuration.png){width=1200}
 
 Clicking this icon will open a modal where you can edit the configuration for all of the fields associated with the `call_model` node. From here, you can save your changes and apply them to the graph. Note that these values reflect the currently active assistant, and saving will update the assistant with the new values.
 
-![Configuration modal](../img/studio_node_configuration.png){width=1200}
+![Configuration modal](img/studio_node_configuration.png){width=1200}
 
 ### Playground
 
@@ -137,7 +137,7 @@ LangGraph Studio also supports prompt engineering through an integration with th
 2. Within the thread log, any nodes that have made an LLM call will have a "View LLM Runs" button. Clicking this will open a popover with the LLM runs for that node.
 3. Select the LLM run you want to edit. This will open the LangSmith Playground with the selected LLM run.
 
-![Playground in Studio](../img/studio_playground.png){width=1200}
+![Playground in Studio](img/studio_playground.png){width=1200}
 
 <<<<<<< HEAD
 

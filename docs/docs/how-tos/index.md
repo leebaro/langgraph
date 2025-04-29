@@ -248,8 +248,9 @@ LangGraph Platform supports multiple types of runs besides streaming runs.
 - [How to run multiple agents in the same thread](../cloud/how-tos/same-thread.md)
 - [How to create cron jobs](../cloud/how-tos/cron_jobs.md)
 - [How to create stateless runs](../cloud/how-tos/stateless_runs.md)
+- [How to use headers as runtime configuration](../cloud/how-tos/configurable_headers.md)
 
-### Streaming
+### Streaming {#streaming_1}
 
 Streaming the results of your LLM application is vital for ensuring a good user experience, especially when your graph may call multiple models and take a long time to fully complete a run. Read about how to stream values from your graph in these how to guides:
 
@@ -267,15 +268,21 @@ With LangGraph Platform you can integrate LangGraph agents into your React appli
 - [How to integrate LangGraph into your React application](../cloud/how-tos/use_stream_react.md)
 - [How to implement Generative User Interfaces with LangGraph](../cloud/how-tos/generative_ui_react.md)
 
-### Human-in-the-loop
+### Human-in-the-loop {#human-in-the-loop-1}
 
-When designing complex graphs, relying entirely on the LLM for decision-making can be risky, particularly when it involves tools that interact with files, APIs, or databases. These interactions may lead to unintended data access or modifications, depending on the use case. To mitigate these risks, LangGraph allows you to integrate human-in-the-loop behavior, ensuring your LLM applications operate as intended without undesirable outcomes.
+[Human-in-the-loop](../concepts/human_in_the_loop.md) functionality allows
+you to involve humans in the decision-making process of your graph. These how-to guides show how to implement human-in-the-loop workflows in your graph.
 
-- [How to add a breakpoint](../cloud/how-tos/human_in_the_loop_breakpoint.md)
 - [How to wait for user input](../cloud/how-tos/human_in_the_loop_user_input.md)
+- [How to review tool calls](../cloud/how-tos/human_in_the_loop_review_tool_calls.md)
+- [How to add static breakpoints](../cloud/how-tos/human_in_the_loop_breakpoint.md)
+
+### Time Travel
+
+[Time travel](../concepts/time-travel.md) allows you to replay past actions in your LangGraph application to explore alternative paths and debug issues. These how-to guides show how to use time travel in your graph.
+
 - [How to edit graph state](../cloud/how-tos/human_in_the_loop_edit_state.md)
 - [How to replay and branch from prior states](../cloud/how-tos/human_in_the_loop_time_travel.md)
-- [How to review tool calls](../cloud/how-tos/human_in_the_loop_review_tool_calls.md)
 
 ### Double-texting
 

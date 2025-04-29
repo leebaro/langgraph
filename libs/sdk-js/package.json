@@ -1,9 +1,13 @@
 {
   "name": "@langchain/langgraph-sdk",
 <<<<<<< HEAD
+<<<<<<< HEAD
   "version": "0.0.45",
 =======
   "version": "0.0.63",
+>>>>>>> main
+=======
+  "version": "0.0.70",
 >>>>>>> main
   "description": "Client library for interacting with the LangGraph API",
   "type": "module",
@@ -15,7 +19,7 @@
     "format": "prettier --write src",
     "lint": "prettier --check src && tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --testPathIgnorePatterns=\\.int\\.test.ts",
-    "typedoc": "typedoc && typedoc src/react/index.ts --out docs/react --options typedoc.react.json"
+    "typedoc": "typedoc && typedoc src/react/index.ts --out docs/react --options typedoc.react.json && typedoc src/auth/index.ts --out docs/auth --options typedoc.auth.json"
   },
   "main": "index.js",
   "license": "MIT",
@@ -76,6 +80,15 @@
       "import": "./client.js",
       "require": "./client.cjs"
     },
+    "./auth": {
+      "types": {
+        "import": "./auth.d.ts",
+        "require": "./auth.d.cts",
+        "default": "./auth.d.ts"
+      },
+      "import": "./auth.js",
+      "require": "./auth.cjs"
+    },
     "./react": {
       "types": {
         "import": "./react.d.ts",
@@ -115,6 +128,10 @@
     "client.js",
     "client.d.ts",
     "client.d.cts",
+    "auth.cjs",
+    "auth.js",
+    "auth.d.ts",
+    "auth.d.cts",
     "react.cjs",
     "react.js",
     "react.d.ts",

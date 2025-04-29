@@ -1,41 +1,46 @@
 import {
   Assistant,
   AssistantGraph,
+  AssistantVersion,
   CancelAction,
+  Checkpoint,
   Config,
+  Cron,
+  CronCreateForThreadResponse,
+  CronCreateResponse,
   DefaultValues,
   GraphSchema,
+  Item,
+  ListNamespaceResponse,
   Metadata,
   Run,
   RunStatus,
+  SearchItemsResponse,
+  Subgraphs,
   Thread,
   ThreadState,
-  Cron,
-  AssistantVersion,
-  Subgraphs,
-  Checkpoint,
-  SearchItemsResponse,
-  ListNamespaceResponse,
-  Item,
   ThreadStatus,
-  CronCreateResponse,
-  CronCreateForThreadResponse,
 } from "./schema.js";
-import { AsyncCaller, AsyncCallerParams } from "./utils/async_caller.js";
-import { IterableReadableStream } from "./utils/stream.js";
 import type {
+  Command,
+  CronsCreatePayload,
+  OnConflictBehavior,
   RunsCreatePayload,
   RunsStreamPayload,
   RunsWaitPayload,
   StreamEvent,
+<<<<<<< HEAD
   CronsCreatePayload,
   OnConflictBehavior,
+=======
+>>>>>>> main
 } from "./types.js";
-import { mergeSignals } from "./utils/signals.js";
+import type { StreamMode, TypedAsyncGenerator } from "./types.stream.js";
+import { AsyncCaller, AsyncCallerParams } from "./utils/async_caller.js";
 import { getEnvironmentVariable } from "./utils/env.js";
-import { _getFetchImplementation } from "./singletons/fetch.js";
-import type { TypedAsyncGenerator, StreamMode } from "./types.stream.js";
+import { mergeSignals } from "./utils/signals.js";
 import { BytesLineDecoder, SSEDecoder } from "./utils/sse.js";
+import { IterableReadableStream } from "./utils/stream.js";
 /**
  * Get the API key from the environment.
  * Precedence:
@@ -83,18 +88,37 @@ class BaseClient {
   protected defaultHeaders: Record<string, string | null | undefined>;
 
   constructor(config?: ClientConfig) {
-    this.asyncCaller = new AsyncCaller({
+    const callerOptions = {
       maxRetries: 4,
       maxConcurrency: 4,
       ...config?.callerOptions,
-    });
+    };
 
+    let defaultApiUrl = "http://localhost:8123";
+    if (
+      !config?.apiUrl &&
+      typeof globalThis === "object" &&
+      globalThis != null
+    ) {
+      const fetchSmb = Symbol.for("langgraph_api:fetch");
+      const urlSmb = Symbol.for("langgraph_api:url");
+
+      const global = globalThis as unknown as {
+        [fetchSmb]?: typeof fetch;
+        [urlSmb]?: string;
+      };
+
+      if (global[fetchSmb]) callerOptions.fetch ??= global[fetchSmb];
+      if (global[urlSmb]) defaultApiUrl = global[urlSmb];
+    }
+
+    this.asyncCaller = new AsyncCaller(callerOptions);
     this.timeoutMs = config?.timeoutMs;
 
     // default limit being capped by Chrome
     // https://github.com/nodejs/undici/issues/1373
     // Regex to remove trailing slash, if present
-    this.apiUrl = config?.apiUrl?.replace(/\/$/, "") || "http://localhost:8123";
+    this.apiUrl = config?.apiUrl?.replace(/\/$/, "") || defaultApiUrl;
     this.defaultHeaders = config?.defaultHeaders || {};
     const apiKey = getApiKey(config?.apiKey);
     if (apiKey) {
@@ -563,6 +587,15 @@ export class ThreadsClient<
      * Must be one of 'idle', 'busy', 'interrupted' or 'error'.
      */
     status?: ThreadStatus;
+    /**
+     * Sort by.
+     */
+    sortBy?: "thread_id" | "status" | "created_at" | "updated_at";
+    /**
+     * Sort order.
+     * Must be one of 'asc' or 'desc'.
+     */
+    sortOrder?: "asc" | "desc";
   }): Promise<Thread<ValuesType>[]> {
     return this.fetch<Thread<ValuesType>[]>("/threads/search", {
       method: "POST",
@@ -571,6 +604,8 @@ export class ThreadsClient<
         limit: query?.limit ?? 10,
         offset: query?.offset ?? 0,
         status: query?.status,
+        sort_by: query?.sortBy,
+        sort_order: query?.sortOrder,
       },
     });
   }

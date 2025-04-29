@@ -1,7 +1,13 @@
 import operator
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from functools import partial
+<<<<<<< HEAD
 from typing import Annotated, Optional, Sequence
+=======
+from random import choice
+from typing import Annotated, Optional
+>>>>>>> main
 
 from langgraph.constants import END, START
 from langgraph.graph.state import StateGraph

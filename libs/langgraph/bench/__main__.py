@@ -22,11 +22,36 @@ async def arun(graph: Pregel, input: dict):
                     "configurable": {"thread_id": str(uuid4())},
                     "recursion_limit": 1000000000,
                 },
+                checkpoint_during=False,
             )
         ]
     )
 
 
+<<<<<<< HEAD
+=======
+async def arun_first_event_latency(graph: Pregel, input: dict) -> None:
+    """Latency for the first event.
+
+    Run the graph until the first event is processed and then stop.
+    """
+    stream = graph.astream(
+        input,
+        {
+            "configurable": {"thread_id": str(uuid4())},
+            "recursion_limit": 1000000000,
+        },
+        checkpoint_during=False,
+    )
+
+    try:
+        async for _ in stream:
+            break
+    finally:
+        await stream.aclose()
+
+
+>>>>>>> main
 def run(graph: Pregel, input: dict):
     len(
         [
@@ -37,11 +62,41 @@ def run(graph: Pregel, input: dict):
                     "configurable": {"thread_id": str(uuid4())},
                     "recursion_limit": 1000000000,
                 },
+                checkpoint_during=False,
             )
         ]
     )
 
 
+<<<<<<< HEAD
+=======
+def run_first_event_latency(graph: Pregel, input: dict) -> None:
+    """Latency for the first event.
+
+    Run the graph until the first event is processed and then stop.
+    """
+    stream = graph.stream(
+        input,
+        {
+            "configurable": {"thread_id": str(uuid4())},
+            "recursion_limit": 1000000000,
+        },
+        checkpoint_during=False,
+    )
+
+    try:
+        for _ in stream:
+            break
+    finally:
+        stream.close()
+
+
+def compile_graph(graph: StateGraph) -> None:
+    """Compile the graph."""
+    graph.compile()
+
+
+>>>>>>> main
 benchmarks = (
     (
         "fanout_to_subgraph_10x",

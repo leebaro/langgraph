@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "langgraph-cli"
 <<<<<<< HEAD
+<<<<<<< HEAD
 version = "0.1.74"
 =======
 version = "0.1.89"
+>>>>>>> main
+=======
+version = "0.2.7"
 >>>>>>> main
 description = "CLI for interacting with LangGraph API"
 authors = []
@@ -16,12 +20,18 @@ packages = [{ include = "langgraph_cli" }]
 langgraph = "langgraph_cli.cli:cli"
 
 [tool.poetry.dependencies]
-python = "^3.9.0,<4.0"
+python = ">=3.9"
 click = "^8.1.7"
+<<<<<<< HEAD
 <<<<<<< HEAD
 langgraph-api = { version = ">=0.0.27,<0.1.0", optional = true, python = ">=3.11,<4.0" }
 =======
 langgraph-api = { version = ">=0.0.42,<0.1.0", optional = true, python = ">=3.11,<4.0" }
+>>>>>>> main
+=======
+langgraph-api = { version = ">=0.1.12,<0.2.0", optional = true, python = ">=3.11,<4.0" }
+langgraph-runtime-inmem = { version = ">=0.0.1,<0.1.0", optional = true, python = ">=3.11,<4.0" }
+langgraph-sdk = { version = ">=0.1.0,<0.2.0", optional = true, python = ">=3.11,<4.0" }
 >>>>>>> main
 python-dotenv = { version = ">=0.8.0", optional = true }
 
@@ -36,7 +46,7 @@ mypy = "^1.10.0"
 msgspec = "^0.19.0"
 
 [tool.poetry.extras]
-inmem = ["langgraph-api", "python-dotenv"]
+inmem = ["langgraph-api", "langgraph-runtime-inmem", "python-dotenv"]
 
 [tool.pytest.ini_options]
 # --strict-markers will raise errors on unknown marks.

@@ -1,4 +1,5 @@
 import collections.abc
+<<<<<<< HEAD
 from typing import (
     Callable,
     Generic,
@@ -6,6 +7,10 @@ from typing import (
     Sequence,
     Type,
 )
+=======
+from collections.abc import Sequence
+from typing import Callable, Generic
+>>>>>>> main
 
 from typing_extensions import NotRequired, Required, Self
 
@@ -36,7 +41,7 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
 
     __slots__ = ("value", "operator")
 
-    def __init__(self, typ: Type[Value], operator: Callable[[Value, Value], Value]):
+    def __init__(self, typ: type[Value], operator: Callable[[Value, Value], Value]):
         super().__init__(typ)
         self.operator = operator
         # special forms from typing or collections.abc are not instantiable
@@ -62,12 +67,12 @@ class BinaryOperatorAggregate(Generic[Value], BaseChannel[Value, Value, Value]):
         )
 
     @property
-    def ValueType(self) -> Type[Value]:
+    def ValueType(self) -> type[Value]:
         """The type of the value stored in the channel."""
         return self.typ
 
     @property
-    def UpdateType(self) -> Type[Value]:
+    def UpdateType(self) -> type[Value]:
         """The type of the update received by the channel."""
         return self.typ
 

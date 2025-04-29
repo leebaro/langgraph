@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 from typing import Generic, Optional, Sequence, Type
+=======
+from collections.abc import Sequence
+from typing import Generic
+>>>>>>> main
 
 from typing_extensions import Self
 
@@ -14,7 +19,7 @@ class NamedBarrierValue(Generic[Value], BaseChannel[Value, Value, set[Value]]):
     names: set[Value]
     seen: set[Value]
 
-    def __init__(self, typ: Type[Value], names: set[Value]) -> None:
+    def __init__(self, typ: type[Value], names: set[Value]) -> None:
         super().__init__(typ)
         self.names = names
         self.seen: set[str] = set()
@@ -23,12 +28,12 @@ class NamedBarrierValue(Generic[Value], BaseChannel[Value, Value, set[Value]]):
         return isinstance(value, NamedBarrierValue) and value.names == self.names
 
     @property
-    def ValueType(self) -> Type[Value]:
+    def ValueType(self) -> type[Value]:
         """The type of the value stored in the channel."""
         return self.typ
 
     @property
-    def UpdateType(self) -> Type[Value]:
+    def UpdateType(self) -> type[Value]:
         """The type of the update received by the channel."""
         return self.typ
 

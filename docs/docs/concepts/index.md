@@ -74,7 +74,14 @@ The LangGraph Platform comprises several components that work together to suppor
 
 ### Deployment Options
 
+<<<<<<< HEAD
 - [Self-Hosted Lite](./self_hosted.md): A free (up to 1 million nodes executed per year), limited version of LangGraph Platform that you can run locally or in a self-hosted manner
 - [Cloud SaaS](./langgraph_cloud.md): Hosted as part of LangSmith.
 - [Bring Your Own Cloud](./bring_your_own_cloud.md): We manage the infrastructure, so you don't have to, but the infrastructure all runs within your cloud.
 - [Self-Hosted Enterprise](./self_hosted.md): Completely managed by you.
+=======
+- <a href="./langgraph_cloud/">Cloud SaaS<sup>(Beta)</sup></a>: Connect to your GitHub repositories and deploy LangGraph Servers to LangChain's cloud. We manage everything.
+- <a href="./langgraph_self_hosted_data_plane/">Self-Hosted Data Plane<sup>(Beta)</sup></a>: Create deployments from the [Control Plane UI](../concepts/langgraph_control_plane.md#control-plane-ui) and deploy LangGraph Servers to your cloud. We manage the [control plane](../concepts/langgraph_control_plane.md), you manage the deployments.
+- <a href="./langgraph_self_hosted_control_plane/">Self-Hosted Control Plane<sup>(Beta)</sup></a>: Create deployments from a self-hosted [Control Plane UI](../concepts/langgraph_control_plane.md#control-plane-ui) and deploy LangGraph Servers to your cloud. You manage everything.
+- [Standalone Container](../concepts/langgraph_standalone_container.md): Deploy LangGraph Server Docker images however you like.
+>>>>>>> main
